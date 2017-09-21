@@ -1,0 +1,50 @@
+version: '3'
+
+services:
+  nginx:
+    restart: always
+    build: ./nginx
+    ports:
+        - 80:80
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+
+  registry:
+    image: registry:2
+    restart: always
+    ports:
+      - 5000:5000
+    volumes:
+      - ./data/registry_data:/var/lib/registry
+
+  jenkins:
+    image: shimmi/jenkins
+    environment:
+      - JENKINS_OPTS="--prefix=/jenkins"
+
+    volumes:
+      - ./data/jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+
+#  sentry:
+#    image: soloidx/sentry
+#    ports:
+#      - 9000:9000
+#    links:
+#      - sentry-redis:redis
+#      - sentry-postgres:postgres
+#      - sentry-smtp:smtp
+#
+#  postgres:
+#    image: postgres:alpine
+#    environment:
+#      - POSTGRES_PASSWORD=postgres
+#      - POSTGRES_USER=postgres
+#    volumes:
+#      - ./data/postgres:/var/lib/postgresql/data
+#
+#  redis:
+#    image: redis:alpine
+#
+#  smtp:
+#    image: tianon/exim4
