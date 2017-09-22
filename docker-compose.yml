@@ -18,7 +18,7 @@ services:
       - ./data/registry_data:/var/lib/registry
 
   jenkins:
-    image: shimmi/jenkins
+    image: soloidx/jenkins
     env_file: .env
     group_add:
       - docker
@@ -37,8 +37,6 @@ services:
   sentry-web:
     <<: *sentry
     command: sentry run web
-    ports:
-      - 9000:9000
     depends_on:
       - sentry-worker
       - sentry-cron
